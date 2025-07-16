@@ -1,6 +1,6 @@
 # Info
 
-There are three sets of scripts here to access three different resources
+There are three sets of scripts here to access three different resources. Scripts were designed to extract data from PubMed, NIHReporter, and clinicaltrials.gov for keyword matching analysis relating to inner ear research.
 
 ## Requirements
 
