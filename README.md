@@ -6,9 +6,24 @@ There are three sets of scripts here to access three different resources. Script
 
 [requests](https://pypi.org/project/requests/)
 
-    
     python3 -m venv env
 
     source env/bin/activate
 
     pip3 install requests
+
+## ClinicalTrials
+
+    python3 query_clinical_trials.py
+
+## NIH_Reporter
+
+Run build_NIH_search_result_database.py, then run
+
+    sqlite3 awards.db < query_NIH_search_result_database.sql  > out.csv
+
+To generate the data for this section.
+
+## Pubmed
+
+    python3 pubmed.py

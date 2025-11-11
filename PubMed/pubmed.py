@@ -1,7 +1,8 @@
-import urllib.parse
-import requests
 import json
 import time
+import urllib.parse
+
+import requests
 
 BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 
@@ -36,14 +37,12 @@ def fetch_and_print_result(mindate, maxdate, term):
     print(f"{count}")
 
 
-
 def make_date_range(name, query_string, start=1825, end=2024):
     periods = {}
     for year in range(start, end + 1, 10):
         period_end = min(year + 9, end)
         periods[f"{name}_{year}-{period_end}"] = (year, period_end, query_string)
     return periods
-
 
 
 if __name__ == "__main__":
@@ -72,6 +71,7 @@ if __name__ == "__main__":
             "vl": (1825, 2025, '"vestibular labyrinth"'),
             "vm": (1825, 2025, '"vestibular maculae" NOT "tectorial membrane" NOT "basilar papilla" NOT "organ of corti" NOT "Reissner membrane" NOT "spiral ganglion" NOT "stria vascularis" NOT "basilar membrane" NOT prostatic NOT laryngeal')
      }
+
     auditory_range = make_date_range("auditory", search_terms["auditory"][-1])
     vestibular_range = make_date_range("vestibular", search_terms["vestib"][-1])
     other_range  = make_date_range("other", search_terms["other"][-1])
@@ -80,14 +80,6 @@ if __name__ == "__main__":
     search_terms |= vestibular_range
     search_terms |= other_range
     search_terms |= all_
-
-  # for key, args in make_date_range("auditory", search_terms["auditory"][-1]).items():
-  #     time.sleep(1)
-  #     print(f"{key}: ", end='')
-  #     fetch_and_print_result(*args)
-  # exit()
-
-# auditory vestibular and other
 
     for key, args in search_terms.items():
         time.sleep(1)

@@ -1,13 +1,13 @@
-import json
-import requests
 import time
 import sqlite3
 
-endpoint = "https://api.reporter.nih.gov/v2/projects/search"
-DATABASE = "awards.db"
+import requests
+
+ENDPOINT = "https://api.reporter.nih.gov/v2/projects/search"
+DATABASE = "awards.db.2"
 
 
-query_payload = {
+query = {
         "criteria": {
             "advanced_text_search": { "search_field": "terms,projecttitle", "search_text": "(cochlea OR \"basilar papilla\" OR \"organ of corti\" OR \"stria vascularis\" OR \"basilar membrane\" OR \"vestibular labyrinth\" OR \"semicircular canal\" OR \"vestibular macula\" OR otolith OR crista ampullaris OR utricle OR cochlea OR \"basilar papilla\" OR \"organ of corti\" OR \"stria vascular\" OR \"basilar membrane\" OR \"reissner membrane\" OR \"inner hair cell\" OR \"outer hair cell\" OR \"auditory hair cell\" OR \"spiral gangli\" OR \"auditory nerv\" OR \"vestibular gangli\" OR \"vestibular nerv\" OR \"vestibular epitheli\" OR \"vestibular labyrinth\" OR \"semicircular canal\" OR \"vestibular macula\" OR otolith OR otoconi OR crista ampullaris OR utric OR saccul)"} },
         "include_fields": [
@@ -123,7 +123,7 @@ def count_total_results(q):
     """This function returns the total number of results reported by the API.
     Its purpose is to help us break up our requests into chunks of 500.
     """
-    r =  requests.post(endpoint, json=q)
+    r =  requests.post(ENDPOINT, json=q)
     return r.json()['meta']['total']
 
 
@@ -131,21 +131,19 @@ def make_request(q):
     """Access the endpoint, but wait 10 seconds first"""
     print("making request")
     time.sleep(10)
-    return requests.post(endpoint, json=q)
+    return requests.post(ENDPOINT, json=q)
 
 
 def main():
     """Access the JSON endpoint 500 results at a time, and add to db"""
     make_database()
     #total_results = 8529
-    total_results = count_total_results(q)
+    total_results = count_total_results(query)
     step = 500
-
     all_json = []
-
     for i in range(0, ((total_results + step ) // step) * step, step ):
-        query_payload['offset'] = i
-        r = make_request(query_payload)
+        query['offset'] = i
+        r = make_request(query)
         all_json.append(r.json())
     for tranche in all_json:
         for obj in tranche["results"]:
